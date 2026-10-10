@@ -1,0 +1,558 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#080810">
+<title>Couple Quest — Our Little Universe</title>
+<style>
+:root{color-scheme:dark;--bg:#080810;--panel:#12121f;--line:#302b49;--purple:#9b78ff;--pink:#ef9cde;--muted:#aaa5bf}
+*{box-sizing:border-box}
+body{margin:0;background:radial-gradient(ellipse at top,#211632 0%,#0b0b16 48%,#05050b 100%);color:#f7f2ff;font-family:system-ui,-apple-system,sans-serif;min-height:100vh}
+body:before{content:"✦       ·       ✧          ·        ✦       ·";position:fixed;top:8px;left:0;width:100%;text-align:center;color:#d7c5ff;opacity:.3;pointer-events:none;letter-spacing:9px}
+main{width:min(100% - 24px,650px);margin:auto;padding:25px 0 45px}
+header{text-align:center;padding:25px 8px 18px}
+.eyebrow{font-size:11px;letter-spacing:4px;text-transform:uppercase;color:var(--pink)}
+h1{font-size:clamp(30px,8vw,45px);line-height:1.12;margin:12px 0;background:linear-gradient(100deg,#fff,#e3caff,#efaee4);color:transparent;background-clip:text}
+h2{line-height:1.35}
+p{line-height:1.65}
+.muted{color:var(--muted)}
+.small{font-size:12px;color:var(--muted)}
+.panel{background:#11111deF;border:1px solid var(--line);border-radius:23px;padding:clamp(17px,5vw,25px);margin:14px 0;box-shadow:0 15px 45px #0005}
+.hidden{display:none!important}
+label{display:block;color:#d8cbe9;font-size:13px;margin:12px 0 5px}
+input,textarea,button{font:inherit;width:100%;border-radius:13px;padding:13px 14px}
+input,textarea{background:#0b0b15;color:white;border:1px solid #3a3450;outline:none}
+input:focus,textarea:focus{border-color:var(--purple)}
+textarea{resize:vertical;min-height:105px;overflow-wrap:anywhere}
+button{background:linear-gradient(110deg,#9874f7,#bd75d7);border:0;color:#fff;font-weight:750;cursor:pointer;margin:6px 0;transition:transform .15s,opacity .15s}
+button:active{transform:scale(.99)}
+button.secondary{background:#222033;border:1px solid #3d3554}
+button.ghost{background:transparent;border:1px solid #49405f}
+button:disabled{opacity:.35;cursor:not-allowed}
+.row{display:flex;gap:9px}
+.row>*{flex:1;min-width:0}
+.pills{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:17px}
+.pill{background:#242037;border:1px solid #38304e;border-radius:30px;padding:6px 10px;font-size:11px;color:#e5d5ff}
+.progress{height:5px;background:#292238;border-radius:20px;overflow:hidden;margin:12px 0 21px}
+#bar{height:100%;width:0;background:linear-gradient(90deg,#9874f7,#ef9cde);transition:width .2s}
+.question{font-size:clamp(21px,5.8vw,29px);margin:16px 0 23px}
+.choice{display:flex;align-items:center;gap:12px;text-align:left;background:#171523;border:1px solid #353047;padding:15px;border-radius:15px;margin:9px 0;font-weight:500;min-height:58px}
+.choice.selected{border-color:var(--pink);background:#30203b;box-shadow:0 0 0 1px #ef9cde33}
+.choice .num{flex:none;display:grid;place-items:center;width:29px;height:29px;border-radius:9px;background:#29233c;color:#d9c3ff;font-size:12px}
+.choice.selected .num{background:#aa72ca;color:white}
+.nav{display:grid;grid-template-columns:1fr 1.5fr;gap:9px;margin-top:20px}
+.status{font-size:13px;color:var(--pink);min-height:20px;overflow-wrap:anywhere}
+.chaptertitle{font-size:12px;letter-spacing:2px;text-transform:uppercase;color:var(--pink)}
+.card{background:#191627;border:1px solid #37304b;border-radius:15px;padding:15px;margin:10px 0;overflow-wrap:anywhere}
+.match{border-color:#d88bcf;background:#291d32}
+.answerlabel{font-size:11px;letter-spacing:1px;color:#c8b8e3;text-transform:uppercase;margin-bottom:8px}
+.answertext{line-height:1.55}
+.badge{display:inline-block;background:#342345;color:#f5c8ef;border-radius:20px;padding:5px 9px;font-size:11px;margin:3px}
+.divider{border:0;border-top:1px solid #302a42;margin:20px 0}
+.center{text-align:center}
+.big{font-size:48px;margin:4px}
+details{border:1px solid #37304b;border-radius:14px;padding:13px;margin:9px 0;background:#151321}
+summary{cursor:pointer;font-weight:650}
+a{color:#e2b8ff}
+footer{text-align:center;font-size:12px;color:#79748e;padding:20px}
+@media(max-width:380px){.row{gap:6px}.panel{padding:15px}.choice{padding:12px}}
+</style>
+</head>
+<body>
+<main>
+<header>
+<div class="eyebrow">A little world for two</div>
+<h1>🌌 Couple Quest</h1>
+<p class="muted">Two hearts. Different answers. One little universe. 💞</p>
+</header>
+
+<section id="home" class="panel">
+<div class="big center">🌙</div>
+<h2 class="center">Welcome to our midnight adventure</h2>
+<p class="muted center">Answer honestly, laugh at each other, discover something new, and see how well you know each other.</p>
+<label for="name">What should we call you?</label>
+<input id="name" maxlength="30" placeholder="Your name or nickname" autocomplete="nickname">
+<button id="startBtn">✨ Begin our quest</button>
+<hr class="divider">
+<h3>💌 Did your person send you a link or code?</h3>
+<p class="small">Import their answers first, then play your own side of the quest.</p>
+<label for="importData">Paste their answer link or code</label>
+<textarea id="importData" placeholder="Paste the link or CQ1 answer code here"></textarea>
+<button class="secondary" id="importBtn">💞 Load their answers</button>
+<p id="homeStatus" class="status" role="status"></p>
+</section>
+
+<section id="game" class="panel hidden">
+<div class="pills">
+<span id="chapter" class="pill"></span>
+<span id="progressText" class="pill"></span>
+<span id="savedText" class="pill">Not finished</span>
+</div>
+<div class="progress"><div id="bar"></div></div>
+<div class="chaptertitle">A question for your heart</div>
+<h2 id="question" class="question"></h2>
+<div id="choices"></div>
+<p id="gameStatus" class="status" role="status"></p>
+<div class="nav">
+<button class="secondary" id="prevBtn">← Back</button>
+<button id="nextBtn">Next question →</button>
+</div>
+<p class="small">Choose one answer per question. Your answers stay in this browser until you reset them.</p>
+</section>
+
+<section id="results" class="panel hidden">
+<div class="big center">💌</div>
+<h2 class="center">Your answers are ready!</h2>
+<p class="muted center">Share your answer link or code with your person so you can compare both sides.</p>
+<div class="card">
+<div class="answerlabel">Your answer code</div>
+<textarea id="shareCode" readonly></textarea>
+<button id="copyCodeBtn">📋 Copy answer code</button>
+<button class="secondary" id="shareBtn">💌 Share my answers</button>
+<p id="shareStatus" class="status"></p>
+</div>
+<div id="compareSummary"></div>
+<div class="row">
+<button class="secondary" id="reviewBtn">Review my answers</button>
+<button id="compareBtn">💞 Compare answers</button>
+</div>
+<hr class="divider">
+<h3>🌠 Bring your person's answers here</h3>
+<label for="partnerData">Paste their answer link or code</label>
+<textarea id="partnerData" placeholder="Paste your person's CQ1 code or share link"></textarea>
+<button id="loadPartnerBtn">✨ Reveal our answers together</button>
+<p id="partnerStatus" class="status" role="status"></p>
+</section>
+
+<section id="comparison" class="panel hidden">
+<div class="big center">💞</div>
+<h2 class="center">Our little universe</h2>
+<p id="matchSummary" class="center muted"></p>
+<div id="comparisonList"></div>
+<button id="backResultsBtn" class="secondary">← Back to my results</button>
+<button id="restartBtn">🌙 Start a new quest</button>
+</section>
+
+<footer>Made with love, under the same sky. 🌙</footer>
+</main>
+
+<script>
+'use strict';
+
+const QUESTIONS = [
+['🌱 Getting to Know Me','What was your first impression of me?',['😍 “Cute… I might like them.”','😂 “This person is trouble.”','🫣 “Why am I shy already?”','🤨 “Let me observe first.”']],
+['🌱 Getting to Know Me','What makes me smile the fastest?',['💬 A sweet message from you','😂 Your funniest nonsense','🫂 A surprise cuddle','🥹 You remembering little things']],
+['🌱 Getting to Know Me','If we had one free evening together, what would I choose?',['🌃 A late-night drive','🍔 Food and deep talks','🎬 A movie under blankets','🚶 A random adventure']],
+['🌱 Getting to Know Me','What would I probably do after a tiny argument?',['😂 Pretend I am completely fine','🥺 Come back for a cuddle','💬 Try to talk it out','😏 Make you laugh first']],
+['😂 Couple Chaos','Who would survive a zombie apocalypse longer?',['🧟 Me — survival instincts','😂 You — pure accidental luck','😭 Neither — we would panic','❤️ We survive together']],
+['😂 Couple Chaos','If I stole your food, what would I say?',['😇 “I thought it was mine.”','😂 “Sharing is caring.”','😭 “I was hungry!”','😏 “You looked too delicious.”']],
+['😂 Couple Chaos','Who is more likely to start a pointless argument?',['🙋 Definitely me','😂 Definitely you','🤝 Both of us equally','😈 Whoever is bored first']],
+['😂 Couple Chaos','If we got lost on a date, what happens next?',['📍 I open Maps immediately','😂 We blame each other','🚗 We explore anyway','❤️ We call it part of the date']],
+['💌 Secret Hearts','What makes you feel most loved by me?',['🫂 My affection','💬 My words','🕐 My time and attention','🥹 My little thoughtful things']],
+['💌 Secret Hearts','Which memory of us would you replay tonight?',['😂 A ridiculous moment','🥰 A sweet romantic moment','🫶 A quiet moment together','📸 One of our favorite pictures']],
+['💌 Secret Hearts','What do you secretly want more of from us?',['💬 More deep conversations','😂 More silly moments','🫂 More affection','🌙 More late-night time']],
+['💌 Secret Hearts','When do you feel closest to me?',['🌙 During late-night talks','😂 When we laugh uncontrollably','❤️ When we reassure each other','🤍 When we simply stay together']],
+['🔥 Dare or Confess','Which confession would be hardest to say out loud?',['🥹 “I miss you badly.”','😍 “I still get butterflies.”','🫣 “I get jealous sometimes.”','❤️ “I can see a future with you.”']],
+['🔥 Dare or Confess','Which dare would you actually choose right now?',['🎤 Send me a dramatic voice note','😂 Make your funniest selfie','💋 Send your flirtiest message','🕺 Do a ridiculous 10-second dance']],
+['🔥 Dare or Confess','What would make you blush fastest?',['😍 A serious compliment','🫣 A sudden romantic confession','😂 A teasing message','💋 A very flirty voice note']],
+['🌎 Our Future','Which future date sounds most like us?',['🌃 City lights and dinner','🏕️ Camping under stars','✈️ Exploring another country','🌊 Beach day with no schedule']],
+['🌎 Our Future','What should we put first on our couple bucket list?',['✈️ Take a trip together','📸 Make a photo memory book','🍽️ Try a fancy restaurant','🌌 Watch a sunrise somewhere beautiful']],
+['🌎 Our Future','If we could teleport anywhere tomorrow, where are we going?',['🇬🇧 Somewhere in the UK','🏝️ A quiet tropical island','🇫🇷 Paris for the romance','🏔️ A place neither of us knows']],
+['🌎 Our Future','What kind of couple do you want us to become?',['😂 The chaotic funny couple','❤️ The soft romantic couple','🤝 The unstoppable team','🌌 The couple with endless stories']],
+['🌌 Our Little Universe','What should our little universe always have?',['😂 Inside jokes nobody understands','❤️ Lots of affection','📸 Memories everywhere','🌙 Peace when the world gets loud']],
+['🌌 Our Little Universe','What would make tonight unforgettable?',['💬 One honest conversation','😂 Laughing until we hurt','🥹 Saying what we usually hide','🌙 Staying up way too late together']],
+['🌌 Our Little Universe','If our relationship had a soundtrack, what would it feel like?',['🎶 Soft and romantic','🔥 Flirty and energetic','🌧️ Emotional and dreamy','😂 Chaotic but happy']],
+['🌌 Our Little Universe','What should our final Couple Quest reward be?',['💌 A secret love letter','😂 A ridiculous couple challenge','🌟 A future date promise','🫶 A message from both hearts']]
+];
+
+const CHAPTERS = [...new Set(QUESTIONS.map(q => q[0]))];
+let playerName = '';
+let answers = Array(QUESTIONS.length).fill(null);
+let questionIndex = 0;
+let partner = null;
+let myPayload = null;
+
+const $ = id => document.getElementById(id);
+
+function show(id) {
+  ['home','game','results','comparison'].forEach(name =>
+    $(name).classList.toggle('hidden', name !== id)
+  );
+}
+
+function setStatus(id, message) {
+  $(id).textContent = message;
+}
+
+function encodePayload(payload) {
+  const bytes = new TextEncoder().encode(JSON.stringify(payload));
+  let binary = '';
+  bytes.forEach(byte => binary += String.fromCharCode(byte));
+  return btoa(binary).replace(/\+/g,'-').replace(/\//g,'_').replace(/=+$/,'');
+}
+
+function decodePayload(raw) {
+  let input = raw.trim();
+  if (!input) throw new Error('Paste an answer link or code first.');
+
+  if (input.includes('#share=')) {
+    input = input.split('#share=')[1].split('&')[0];
+  } else if (input.startsWith('http://') || input.startsWith('https://')) {
+    try {
+      const url = new URL(input);
+      input = url.hash.startsWith('#share=')
+        ? url.hash.slice(7)
+        : '';
+    } catch {}
+  } else if (input.startsWith('#share=')) {
+    input = input.slice(7);
+  }
+
+  input = input.replace(/^CQ1:/,'').trim();
+  if (!/^[A-Za-z0-9_-]+$/.test(input)) {
+    throw new Error('That does not look like a valid Couple Quest code.');
+  }
+
+  const base64 = input.replace(/-/g,'+').replace(/_/g,'/');
+  const binary = atob(base64 + '='.repeat((4 - base64.length % 4) % 4));
+  const bytes = Uint8Array.from(binary, c => c.charCodeAt(0));
+  const data = JSON.parse(new TextDecoder().decode(bytes));
+
+  if (data.v !== 1 || !Array.isArray(data.a) ||
+      data.a.length !== QUESTIONS.length ||
+      !data.a.every(a => a === null || (Number.isInteger(a) && a >= 0 && a < 4)) ||
+      typeof data.n !== 'string' || !data.n.trim()) {
+    throw new Error('This answer code is incomplete or not compatible with this game.');
+  }
+
+  return data;
+}
+
+function createPayload() {
+  return {
+    v: 1,
+    n: playerName || 'Player',
+    a: answers,
+    t: new Date().toISOString()
+  };
+}
+
+function makeShareCode(payload) {
+  return 'CQ1:' + encodePayload(payload);
+}
+
+function makeShareLink(payload) {
+  const base = location.href.split('#')[0];
+  return base + '#share=' + encodePayload(payload);
+}
+
+function readIncomingLink() {
+  if (!location.hash.startsWith('#share=')) return;
+  try {
+    partner = decodePayload(location.hash);
+    $('importData').value = location.href;
+    setStatus('homeStatus', '💌 Answers from ' + partner.n + ' are ready to import. Start your side of the quest!');
+  } catch (error) {
+    setStatus('homeStatus', error.message);
+  }
+}
+
+function importPartner(raw) {
+  try {
+    const data = decodePayload(raw);
+    if (data.n.toLowerCase() === playerName.toLowerCase()) {
+      throw new Error('That looks like your own answers. Ask your person to send theirs!');
+    }
+    partner = data;
+    setStatus('homeStatus', '💞 Loaded ' + data.n + "'s answers. Begin your quest to compare!");
+    setStatus('partnerStatus', '💞 Loaded ' + data.n + "'s answers.");
+    $('partnerData').value = raw.trim();
+    $('importData').value = raw.trim();
+    return true;
+  } catch (error) {
+    setStatus('homeStatus', error.message);
+    setStatus('partnerStatus', error.message);
+    return false;
+  }
+}
+
+function startGame() {
+  playerName = $('name').value.trim().slice(0,30) || 'Player';
+  answers = Array(QUESTIONS.length).fill(null);
+  questionIndex = 0;
+  show('game');
+  renderQuestion();
+}
+
+function renderQuestion() {
+  const q = QUESTIONS[questionIndex];
+  $('chapter').textContent = q[0];
+  $('progressText').textContent = 'Question ' + (questionIndex + 1) + ' of ' + QUESTIONS.length;
+  $('savedText').textContent = answers[questionIndex] === null ? 'Choose an answer' : 'Answer saved ✓';
+  $('bar').style.width = ((questionIndex + 1) / QUESTIONS.length * 100) + '%';
+  $('question').textContent = q[1];
+  $('choices').replaceChildren();
+
+  q[2].forEach((answer, i) => {
+    const button = document.createElement('button');
+    button.className = 'choice' + (answers[questionIndex] === i ? ' selected' : '');
+    const num = document.createElement('span');
+    num.className = 'num';
+    num.textContent = String.fromCharCode(65+i);
+    const text = document.createElement('span');
+    text.textContent = answer;
+    button.append(num, text);
+    button.onclick = () => {
+      answers[questionIndex] = i;
+      setStatus('gameStatus', '');
+      renderQuestion();
+    };
+    $('choices').appendChild(button);
+  });
+
+  $('prevBtn').disabled = questionIndex === 0;
+  $('nextBtn').textContent = questionIndex === QUESTIONS.length - 1
+    ? 'Finish my answers 💌' : 'Next question →';
+  setStatus('gameStatus', '');
+}
+
+function nextQuestion() {
+  if (answers[questionIndex] === null) {
+    setStatus('gameStatus', 'Choose one answer before continuing ❤️');
+    return;
+  }
+  if (questionIndex < QUESTIONS.length - 1) {
+    questionIndex++;
+    renderQuestion();
+  } else {
+    finishAnswers();
+  }
+}
+
+function finishAnswers() {
+  if (answers.some(a => a === null)) {
+    setStatus('gameStatus', 'Please answer every question first.');
+    return;
+  }
+  myPayload = createPayload();
+  $('shareCode').value = makeShareCode(myPayload);
+  $('partnerData').value = '';
+  setStatus('shareStatus', '');
+  show('results');
+  renderSummary();
+}
+
+function renderSummary() {
+  if (!partner) {
+    $('compareSummary').innerHTML =
+      '<div class="card"><strong>🌙 Your answers are complete.</strong><p class="muted">Share your code with your person. When you receive their code, paste it below to compare both sides.</p></div>';
+    return;
+  }
+  $('compareSummary').innerHTML =
+    '<div class="card"><strong>💞 ' + escapeHTML(partner.n) +
+    "'s answers are loaded.</strong><p class=\"muted\">You can now compare your answers together.</p></div>";
+}
+
+function escapeHTML(value) {
+  return String(value).replace(/[&<>"']/g, c => ({
+    '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'
+  }[c]));
+}
+
+async function copyText(text) {
+  if (navigator.clipboard && window.isSecureContext) {
+    await navigator.clipboard.writeText(text);
+    return;
+  }
+  const area = document.createElement('textarea');
+  area.value = text;
+  area.style.position = 'fixed';
+  area.style.opacity = '0';
+  document.body.appendChild(area);
+  area.select();
+  const ok = document.execCommand('copy');
+  area.remove();
+  if (!ok) throw new Error('Copy was blocked. Please select and copy the text manually.');
+}
+
+async function copyCode() {
+  try {
+    await copyText($('shareCode').value);
+    setStatus('shareStatus', '✅ Answer code copied! Send it to your person.');
+  } catch (error) {
+    setStatus('shareStatus', error.message);
+    $('shareCode').focus();
+    $('shareCode').select();
+  }
+}
+
+async function shareAnswers() {
+  const link = makeShareLink(myPayload);
+  try {
+    if (navigator.share) {
+      await navigator.share({
+        title: 'My Couple Quest answers 💞',
+        text: playerName + ' shared their Couple Quest answers with you!',
+        url: link
+      });
+      setStatus('shareStatus', '💌 Share sheet opened.');
+    } else {
+      await copyText(link);
+      setStatus('shareStatus', '✅ Share link copied! Send it on WhatsApp.');
+    }
+  } catch (error) {
+    if (error.name !== 'AbortError') {
+      try {
+        await copyText(link);
+        setStatus('shareStatus', '✅ Link copied! Send it on WhatsApp.');
+      } catch {
+        $('shareCode').value = makeShareCode(myPayload);
+        setStatus('shareStatus', 'Copy the answer code above and send it instead.');
+      }
+    }
+  }
+}
+
+function compareAnswers() {
+  const raw = $('partnerData').value.trim() || $('importData').value.trim();
+  if (!partner && raw) {
+    try {
+      partner = decodePayload(raw);
+    } catch (error) {
+      setStatus('partnerStatus', error.message);
+      return;
+    }
+  }
+  if (!partner) {
+    setStatus('partnerStatus', 'Paste your person’s answer code or link first.');
+    return;
+  }
+  if (partner.n.toLowerCase() === playerName.toLowerCase() &&
+      partner.a.every((a,i) => a === answers[i])) {
+    setStatus('partnerStatus', 'That appears to be your own answer code. Ask your person for theirs.');
+    return;
+  }
+  renderComparison();
+}
+
+function renderComparison() {
+  let matches = 0;
+  let answeredBoth = 0;
+  const list = $('comparisonList');
+  list.replaceChildren();
+
+  QUESTIONS.forEach((q, i) => {
+    const mine = answers[i];
+    const theirs = partner.a[i];
+    const same = mine !== null && theirs !== null && mine === theirs;
+    if (mine !== null && theirs !== null) {
+      answeredBoth++;
+      if (same) matches++;
+    }
+
+    const details = document.createElement('details');
+    details.open = i < 3;
+    const summary = document.createElement('summary');
+    summary.textContent = (same ? '💞 ' : '🌙 ') + (i + 1) + '. ' + q[1];
+    details.appendChild(summary);
+
+    const chapter = document.createElement('div');
+    chapter.className = 'answerlabel';
+    chapter.style.marginTop = '14px';
+    chapter.textContent = q[0];
+    details.appendChild(chapter);
+
+    details.appendChild(makeAnswer('YOU — ' + playerName,
+      mine === null ? 'Not answered' : q[2][mine], same));
+    details.appendChild(makeAnswer(escapeHTML(partner.n),
+      theirs === null ? 'Not answered' : q[2][theirs], same));
+
+    const verdict = document.createElement('p');
+    verdict.className = 'small';
+    verdict.textContent = mine === null || theirs === null
+      ? 'One or both answers are missing.'
+      : same ? '✨ You chose the same answer!' : '😂 Different answers — time to explain yourselves!';
+    details.appendChild(verdict);
+    list.appendChild(details);
+  });
+
+  $('matchSummary').textContent = matches + ' matching answers out of ' +
+    answeredBoth + ' questions answered by both of you. Every difference is a new conversation. ❤️';
+  show('comparison');
+}
+
+function makeAnswer(label, answer, same) {
+  const box = document.createElement('div');
+  box.className = 'card' + (same ? ' match' : '');
+  const title = document.createElement('div');
+  title.className = 'answerlabel';
+  title.textContent = label;
+  const text = document.createElement('div');
+  text.className = 'answertext';
+  text.textContent = answer;
+  box.append(title, text);
+  return box;
+}
+
+function restart() {
+  if (!confirm('Start a new quest? Your current answers will be cleared from this page.')) return;
+  playerName = '';
+  answers = Array(QUESTIONS.length).fill(null);
+  questionIndex = 0;
+  partner = null;
+  myPayload = null;
+  $('name').value = '';
+  $('importData').value = '';
+  $('partnerData').value = '';
+  history.replaceState(null, '', location.href.split('#')[0]);
+  setStatus('homeStatus', '');
+  show('home');
+}
+
+/* BUTTONS */
+$('startBtn').addEventListener('click', () => {
+  playerName = $('name').value.trim().slice(0,30) || 'Player';
+  if ($('importData').value.trim()) {
+    try { partner = decodePayload($('importData').value); }
+    catch (error) {
+      setStatus('homeStatus', error.message);
+      return;
+    }
+    if (partner.n.toLowerCase() === playerName.toLowerCase()) {
+      setStatus('homeStatus', 'Use a different name from the person who sent the link.');
+      return;
+    }
+  }
+  startGame();
+});
+
+$('importBtn').addEventListener('click', () => {
+  playerName = $('name').value.trim().slice(0,30) || 'Player';
+  importPartner($('importData').value);
+});
+
+$('prevBtn').addEventListener('click', () => {
+  if (questionIndex > 0) {
+    questionIndex--;
+    renderQuestion();
+  }
+});
+$('nextBtn').addEventListener('click', nextQuestion);
+$('copyCodeBtn').addEventListener('click', copyCode);
+$('shareBtn').addEventListener('click', shareAnswers);
+$('reviewBtn').addEventListener('click', () => {
+  questionIndex = 0;
+  show('game');
+  renderQuestion();
+});
+$('compareBtn').addEventListener('click', compareAnswers);
+$('loadPartnerBtn').addEventListener('click', compareAnswers);
+$('backResultsBtn').addEventListener('click', () => show('results'));
+$('restartBtn').addEventListener('click', restart);
+
+readIncomingLink();
+</script>
+</body>
+</html>
